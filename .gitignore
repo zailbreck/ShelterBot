@@ -1,2 +1,9 @@
 node_modules/
 .idea/
+/DB/sqldiff.exe
+/DB/sqlite3.exe
+/DB/sqlite3_analyzer.exe
+/DB/shelterDB
+/DB/shelterDB.db
+/Temp/
+/DB/

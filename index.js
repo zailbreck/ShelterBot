@@ -5,15 +5,12 @@ let _env = JSON.parse(fs.readFileSync('./Cfg/env.json'));
 let session = `./${_env.botSessionName}.json`
 let newMember = JSON.parse(fs.readFileSync('./Lib/GroupMember.json'))
 
+
 const {
     default: makeWASocket,
-    BufferJSON,
-    initInMemoryKeyStore,
     DisconnectReason,
-    AnyMessageContent,
     makeInMemoryStore,
     useSingleFileAuthState,
-    delay
 } = require("@adiwajshing/baileys")
 
 const { state, saveState } = useSingleFileAuthState(session)
@@ -50,10 +47,6 @@ function landingPage(){
     console.log('Checking Session ...')
 }
 
-
-
-
-
 const connectToWhatsApp = async () => {
     const shelter = makeWASocket({
         printQRInTerminal: true,
@@ -70,9 +63,9 @@ const connectToWhatsApp = async () => {
     require('./Lib/config')
     require('./Cfg/help')
     require('./Handle/msg')
-    nocache('./Lib/config', module => console.log("Update Config"))
-    nocache('./Cfg/help', module => console.log("Update Help"))
-    nocache('./Handle/msg', module => console.log("Update Messsage Handler"))
+    nocache('./Lib/config',_ => console.log("Update Config"))
+    nocache('./Cfg/help', _ => console.log("Update Help"))
+    nocache('./Handle/msg', _ => console.log("Update Messsage Handler"))
 
     // Check if Got New Messages
     bot.on('messages.upsert', async res => {
@@ -80,9 +73,10 @@ const connectToWhatsApp = async () => {
         let msg = res.messages[0];
         msg = serialize(shelter, msg)
         msg.isBaileys = msg.key.id.startsWith('BAE5') || msg.key.id.startsWith('3EB0')
+        // const from = msg.key.remoteJid
 
         // Call Message Handler & Passing Data
-        require('./Handle/msg')(shelter, bot, msg, res, _env, store, newMember)
+        await require('./Handle/msg')(shelter, bot, msg, res, _env, store, newMember)
     })
 
     // Check Current Sessions
@@ -101,16 +95,24 @@ const connectToWhatsApp = async () => {
     //Save New Session if Session Updated
     bot.on('creds.update', () => saveState)
 
+    bot.on('groups.update', async () => {})
+
+    bot.on('message-receipt.update', async () => {})
+
+
     //Send Response if Member Group Updated
     bot.on('group-participants.update', async (data) => {
+        console.log('Grup Update')
+        console.log(data)
         const isNew = !!newMember.includes(data.id)
         if (!isNew) {
             try {
                 for (let i of data.participants) {
+                    let pp_user = undefined
                     try {
-                        var pp_user = await nayla.profilePictureUrl(i, 'image')
+                        pp_user = await shelter.profilePictureUrl(i, 'image')
                     } catch {
-                        var pp_user = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+                        pp_user = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
                     }
                     if (data.action === "add") {
                         shelter.sendMessage(data.id, {
@@ -135,6 +137,7 @@ const connectToWhatsApp = async () => {
             }
         }
     })
+
     shelter.reply = (from, content, msg) => shelter.sendMessage(from, {
         text: content
     },{
