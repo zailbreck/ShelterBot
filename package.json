@@ -1,0 +1,24 @@
+{
+  "name": "shelterbot",
+  "version": "1.0.0",
+  "description": "Simple WhatsApp Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "bot",
+    "whatsapp",
+    "automation"
+  ],
+  "author": "zailbreck",
+  "license": "ISC",
+  "dependencies": {
+    "@adiwajshing/baileys": "^4.4.0",
+    "@adiwajshing/keyed-db": "^0.2.4",
+    "node-fetch": "^2.6.6",
+    "pino": "^8.7.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
