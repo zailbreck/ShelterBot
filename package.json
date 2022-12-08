@@ -17,6 +17,8 @@
   "dependencies": {
     "@adiwajshing/baileys": "^4.4.0",
     "@adiwajshing/keyed-db": "^0.2.4",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "fluent-ffmpeg": "^2.1.2",
     "node-fetch": "^2.6.6",
     "pino": "^8.7.0",
     "qrcode-terminal": "^0.12.0"
