@@ -5,6 +5,8 @@ let _env = JSON.parse(fs.readFileSync('./Cfg/env.json'));
 let session = `./${_env.botSessionName}.json`
 let newMember = JSON.parse(fs.readFileSync('./Lib/GroupMember.json'))
 
+// const DbBuilder = require('./Lib/dbBuilder')
+// const dBuilder = new DbBuilder()
 
 const {
     default: makeWASocket,
@@ -63,9 +65,15 @@ const connectToWhatsApp = async () => {
     require('./Lib/config')
     require('./Cfg/help')
     require('./Handle/msg')
-    nocache('./Lib/config',_ => console.log("Update Config"))
-    nocache('./Cfg/help', _ => console.log("Update Help"))
-    nocache('./Handle/msg', _ => console.log("Update Messsage Handler"))
+    nocache('./Lib/config',_ => {
+        // dBuilder.makeLogger('BOT', 'Update Config')
+    })
+    nocache('./Cfg/help', _ => {
+        // dBuilder.makeLogger('BOT', 'Update Help')
+    })
+    nocache('./Handle/msg', _ => {
+        // dBuilder.makeLogger('BOT', 'Update Message')
+    })
 
     // Check if Got New Messages
     bot.on('messages.upsert', async res => {
